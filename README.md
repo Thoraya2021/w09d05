@@ -19,24 +19,24 @@
 ## Getting Started
 ### Installation Packages
 #### To Use React Redux With Your React App, Install It As A Dependency:
->>> npx create-react-app my-app
+- npx create-react-app my-app
 >>>
->>> npm install redux
+- npm install redux
 >>>
->>> npm install react-redux
+- npm install react-redux
 >>> 
->>>  npm install redux
+-  npm install redux
 >>>  
->>> npm i redux-devtools-extension
+- npm i redux-devtools-extension
 #### React-Dom > This Package Serves As The Entry Point To The Dom And Server Renderers For React. It Is Intended To Be Paired With The Generic React Package, Which Is Shipped As React To Npm.
->>> npm install react-router-dom
+- npm install react-router-dom
 #### React-Dotenv > Load Environment Variables Dynamically For Your React Applications Created With Cra (Create-React-App).
->>> npm install react-dotenv
+- npm install react-dotenv
 >>> 
->>> npm install dotenv
+- npm install dotenv
 
 #### Request And Response Of Back-End
->>> npm install axios
+- npm install axios
 
 # ER diagram
-![ ](https://github.com/Thoraya2021/w09d03/blob/main/Screenshot%20(8).png)
+![ ](https://github.com/Thoraya2021/w08d04/blob/main/Screenshot%20(7).png)
