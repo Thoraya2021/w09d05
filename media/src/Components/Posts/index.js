@@ -1,13 +1,18 @@
 import React from "react";
 import './style.css';
+import Post from './../Post'
 
 const Posts =()=> {
   return (
-    <div className="home">
+    <div className="posts">
       
 
 <h1>posts</h1>
 
+<Post/>
+<Post/>
+<Post/>
+<Post/>
 
 
 
@@ -16,3 +21,10 @@ const Posts =()=> {
 }
 
 export default Posts;
+
+
+
+
+
+
+
