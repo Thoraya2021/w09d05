@@ -1,0 +1,17 @@
+
+.homepage {
+  background-image: linear-gradient(
+      0deg,
+      rgba(245, 237, 237, 0.25),
+      rgba(245, 240, 240, 0.25)
+    ),
+    url("https://i.pinimg.com/474x/b7/63/aa/b763aa4d16f884702e5c895cdbc32afd--lilac-bushes-hydrangea.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 700px;
+  margin: 0;
+  padding: 0;
+
+}
