@@ -21,7 +21,7 @@ const Login = () => {
       .then((response) => {
         console.log(response.data);
         if(response.data){
-          navigate("/Courses");
+          navigate("/posts");
         
 
         }
@@ -32,9 +32,9 @@ const Login = () => {
   };
 
 
-  const goReg = () => {
+  const reg = () => {
 
-    navigate("/register");
+    navigate("/Registration");
   };
   return (
     <div className="loginform">
@@ -71,12 +71,12 @@ const Login = () => {
             <Button className="button" onClick={login}>
               Login
             </Button>
-            
+            <p>Need an Account ?</p>
             <Button
               type="button"
               className="button"
               variant="outline-dark"
-              onClick={goReg}
+              onClick={reg}
             >
               Register
             </Button>
