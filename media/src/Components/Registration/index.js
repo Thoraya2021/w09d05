@@ -47,13 +47,15 @@ const Register = () => {
             onChange={(e) => {
               setusernameReg(e.target.value);
             }}
-            placeholder="Enter Username"
+            className="textarea1"
+              placeholder="Enter Username"
           />
         </Form.Group>
         <Form.Group className="m-5" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <br />
           <Form.Control
+          className="textarea1"
             type="email"
             placeholder="Enter email"
             name="email"
@@ -69,6 +71,7 @@ const Register = () => {
           <br />
           <Form.Control
             type="password"
+            className="textarea1"
             placeholder="Enter Password"
             name="email"
             required

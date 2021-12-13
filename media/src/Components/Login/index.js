@@ -46,6 +46,7 @@ const Login = () => {
             <br />
             <Form.Control
               type="email"
+              className="textarea1"
               placeholder="Enter email"
               name="email"
               onChange={(e) => {
@@ -58,6 +59,7 @@ const Login = () => {
             <br />
             <Form.Control
               type="password"
+              className="textarea1"
               placeholder="Password"
               name="password"
               onChange={(e) => {
@@ -80,6 +82,7 @@ const Login = () => {
             >
               Register
             </Button>
+           
           </Form.Group>
         </form>
       </Container>

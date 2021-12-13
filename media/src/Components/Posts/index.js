@@ -1,4 +1,5 @@
 import React from "react";
+import React, {useEffect, useState} from 'react';
 import './style.css';
 import Post from './../Post'
 
@@ -10,6 +11,10 @@ const Posts =()=> {
 <h1>Tweet`s</h1>
 
 <Post/>
+
+
+
+
 
 
 
