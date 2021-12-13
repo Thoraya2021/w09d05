@@ -19,7 +19,7 @@ const App=()=> {
 
 <Nav/>
 <Routes>
-        <Route path="/" element={<Home />, <Login />} />
+        <Route path="/" element={<Home />} />
         <Route exact path="/Posts" element={ <Posts/>  }/>
         <Route exact path="/Login" element={<Login />} />
         <Route exact path="/Registration" element={<Registration />} />

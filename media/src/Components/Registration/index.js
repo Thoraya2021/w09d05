@@ -15,7 +15,7 @@ const Register = () => {
   const reg = (e) => {
     e.preventDefault();
     console.log(usernameReg);
-    axios.post("http://localhost:5000/signup", {
+    axios.post("http://localhost:4000/signup", {
         username: usernameReg,
         email: emailReg,
         password: passwordReg,

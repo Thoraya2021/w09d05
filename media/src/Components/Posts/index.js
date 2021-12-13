@@ -7,12 +7,10 @@ const Posts =()=> {
     <div className="posts">
       
 
-<h1>posts</h1>
+<h1>Tweet`s</h1>
 
 <Post/>
-<Post/>
-<Post/>
-<Post/>
+
 
 
 
@@ -21,10 +19,4 @@ const Posts =()=> {
 }
 
 export default Posts;
-
-
-
-
-
-
 
