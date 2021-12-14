@@ -1,47 +1,41 @@
-const instialState = {
-    // here define what state i want use global
-    //any state should give it key with intial value
-    token: "" 
+const initialState = {
+  role: "",
+  token: "",
+  user: null,
+};
+const Login = (state = initialState, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case "LOGIN":
+      const { role, token, user } = payload;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("user", JSON.stringify(user));
+      return { role, token, user };
+    case "LOGOUT":
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("user");
+      return { role: "", token: "", user: null };
+    default:
+      const tokenStorge = localStorage.getItem("token");
+      const roleStorge = localStorage.getItem("role");
+      const userStorge = JSON.parse(localStorage.getItem("user"));
+      if (tokenStorge && roleStorge && userStorge)
+        return { role: roleStorge, token: tokenStorge, user: userStorge };
+      else return state;
+  }
+};
+export default Login;
+export const userLogin = (data) => {
+  return {
+    type: "LOGIN",
+    payload: data,
   };
-
-  //here reducers fuction should have 2 parameters state what i give and action 
-  const signIn = (state = instialState, action) => {
-
-    //type >> here what i want if want to change in state or clear states any thing
-    //payload >> contain the data what will change and contain switch cases
-    const { type, payload } = action;
-    //here action for what the user can do in website and i should return data from user
-    switch (type) {
-        //this type will send payload contian token
-      case "LOGIN":
-        const { token } = payload;
-        localStorage.setItem("token", token);
-        return { token }; // << here return token after the value change contain token for user
-  
-
-case "LOGOUT"://<< this type clear token and localstorage 
-        localStorage.clear();
-        return payload;
-  
-      default: //<<this default return state if there no any change will back for me initial value for state 
-        const tokenStorage = localStorage.getItem("token");
-        if (tokenStorage) return { token: tokenStorage };
-        else return state;
-    }
+};
+export const userLogout = (data) => {
+  return {
+    type: "LOGOUT",
+    payload: data,
   };
-  
-  export default signIn; ////<< only one export default on file
-  
-export const login = (data) => {  ////<< here not like export defual can i define many export
-    return {
-      type: "LOGIN",
-      payload: data,
-    };
-  };
-  export const logout = (data) => {
-    return {
-      type: "LOGOUT",
-      payload: data,
-    };
-  };
-  
+};
