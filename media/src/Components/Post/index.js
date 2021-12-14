@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector } from "react-redux";
 
 const Post = () => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -11,10 +11,18 @@ const Post = () => {
   const state = useSelector((state) => {
     return state;
   });
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     getallpost ();
   }, []);
+
+
+  const signOut = () => {
+    dispatch(logout({ token: "" }));
+  };
+
 
   const  getallpost = async () => {
     try {
@@ -48,14 +56,43 @@ const Post = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+
+    const deletepost = (id) => {
+      try {
+        axios
+          .delete(`${BASE_URL}/deletepost/${id}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${state.signIn.token}`,
+            },
+          });
+
+
+       
 
   return (
-    <>
-     
-    </>
+   
+
+     <div className ="posts">
+       
+      {post.map((item) => (
+          <h2 key={item._id}>{item.desc}</h2>
+          <img src={item.img}
+          height="130px" width="150" alt="no img" />
+          
+        ))}
+      <button onClick={createpost}>send tweet</button>
+      <br />
+      <button onClick={ deletepost }>X</button>
+      <br />
+      <button onClick={signOut}>logOut</button>
+      <br />
+    </div>
   );
 };
+
+
+
 export default Post;
 
 
