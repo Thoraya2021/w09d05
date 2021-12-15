@@ -16,9 +16,7 @@ const NavBar = () => {
         <li className="li1">Tweet`s</li>
       </Link>
     
-      <Link to="/">
-        <li> Home</li>
-      </Link>
+  
       <Link to="/Posts">
         <li>posts</li>
       </Link>

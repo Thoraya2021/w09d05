@@ -1,132 +1,227 @@
 
+import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { storage } from "../firebase";
-import { useSelector } from "react-redux";
+import './style.css'
 
 const Post = () => {
+
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const [posts, setPosts] = useState([]);
-  const [post, setPost] = useState(null); 
-  const [updatePost, setUpdatePost] = useState("");
-  const [updatePic, setUpdatePic] = useState("");
-  const [url, setUrl] = useState("");
-  const [desc, setDesc] = useState("");
-  const [progress, setProgress] = useState(0);
-  const state = useSelector((state) => {
-    return state;
-  });
-  useEffect(() => {
-    getAllPosts();
-  }, []);
-  const handleChange = (e) => {
-    console.log(e.target.files[0]);
-    if (e.target.files[0]) {
-      setPost(e.target.files[0]);
+  const params = useParams();
+  const [data, setData] = useState([]);
+  const [User, setUser] = useState("");
+  const [likes, setlikes] = useState(0);
+  const [currentUserLiked, setcurrentUserLiked] = useState(false);
+
+  const getPosts = async () => {
+    try {
+      await axios
+        .get(`${BASE_URL}/getpost`)
+        .then((result) => {
+          console.log(result.data);
+          // setlikes(result.data[0].like.length);
+          setData(result.data);
+        });
+    } catch (error) {
+      console.log(error);
     }
-  };
-  const handleUpload = () => {
-    console.log("post", post);
-    const uploadTask = storage.ref(`image/${post.name}`).put(post);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("image")
-          .child(post.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-            setUrl(url);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    );
   };
 
-  const getAllPosts = async () => {
+  const sendComment = async (e) => {
+    e.preventDefault();
     try {
-      const result = await axios.get(`${BASE_URL}/getpost`, {
-        headers: {
-          Authorization: `Bearer ${state.login.token}`,
-        },
-      });
-      console.log(result);
-      setPosts(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // //add new post
-  const addNewPost = async () => {
-    console.log(desc);
-    console.log(url);
-    console.log(state.login.token);
-    try {
-      await axios.post(
-        `${BASE_URL}/createpost`,
-        {
-          img: url,
-          desc,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${state.login.token}`,
+      if (User) {
+        const result = await axios.post(
+          `${BASE_URL}/createcomment/${params.id}`,
+          {
+            comment: e.target.comment.value,
+            username: User,
           },
-        }
+          {
+            withCredentials: true,
+          }
+        );
+        getComments();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.comment.value = "";
+  };
+
+  const [noComment, setNoComment] = useState(0);
+  const [commments, setcommments] = useState([]);
+
+  const getComments = async () => {
+    try {
+      const result = await axios.post(
+        `${BASE_URL}/allcomment`,
+        {
+          post: params.id,
+        },
+ 
       );
-      setUrl("");
-      setDesc("");
-      getAllPosts(state.login.token);
-    } catch (error) {
-      console.log(error);
+      setcommments(result.data);
+      setNoComment(result.data.length);
+    } catch (err) {
+      console.error(err);
     }
   };
-  const updatepost = async (id) => {
-    console.log(state.login.token);
+
+  const DeleteComment = async (id) => {
     try {
-      await axios.put(
-        `${process.env.REACT_APP_BASE_URL}/posts/${id}`,
-        {
-          pic: updatePic,
-          description: updatePost,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${state.login.token}`,
-          },
-        }
-      );
-      getAllPosts(state.login.token);
-    } catch (error) {
-      console.log(error);
-    }
-    window.location.reload(false);
-  };
-  const deletepost = async (_id) => {
-    try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/getpost/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${state.login.token}`,
-        },
+      const result = await axios.delete(`${BASE_URL}/deletecomment/${id}`, {
+        withCredentials: true,
       });
-      deletepost(state.users.token);
-    } catch (error) {
-      console.log(error);
+      console.log(result.data);
+      getComments();
+    } catch (err) {
+      console.error(err);
     }
-    window.location.reload(false);
   };
+
+  const likePost = async () => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/addLike/${params.id}`, {
+        withCredentials: true,
+      });
+      console.log(result.data.result);
+      if(result.data.result=='removeLike'){
+          setcurrentUserLiked(false)
+      }else if(result.data.result=='newLike'){
+        setcurrentUserLiked(true)
+      }
+      getPosts();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(async () => {
+    const username = await axios.get(`${BASE_URL}/alluser`, {
+      withCredentials: true,
+    });
+    setUser(username.data.user._id);
+    getPosts();
+    getComments();
+   
+  }, []);
+
+  return (
+    <div>
+  
+        <div className="tweet">
+          <h1>{data[0]?.title}</h1>
+          <img
+            src={data[0]?.img}
+            alt=""
+            width="400"
+            height="400"
+          />
+          <p>{data[0]?.desc}</p>
+          <h4>
+            Like:
+            {currentUserLiked ? (
+              <span id="heart" onClick={likePost}>
+                🤍
+              </span>
+            ) : (
+              <span onClick={likePost}>🤍</span>
+            )}
+            | {likes}
+          </h4>
+        </div>
+
+        <form className="comments_form" onSubmit={sendComment}>
+          <div className="commentHead">
+            <h3>New Comment</h3>
+            <button type="submit">Submit</button>
+          </div>
+          <div className="commentTail">
+            <textarea
+              name="comment"
+              placeholder="write tweet"
+              required
+           
+            ></textarea>
+          </div>
+          <div className="numComment">
+            <h3>{noComment} Comments</h3>
+          </div>
+          {commments
+            ?.map((comment, index) => {
+              return (
+                <div className="realComment" key={index}>
+                  <hr />
+                  <div className='postimgage'>
+                  <img 
+            src="https://th.bing.com/th/id/OIP.UDT_R3C2jSNNIFHF-oS6-wHaFQ?pid=ImgDet&w=832&h=590&rs=1"
+            height="170px"  alt="no img" />
+                    <div className="comment">
+                      <h3>{comment.user.username}</h3>
+                      <p>{comment.comment}</p>
+                    
+                    </div>
+                    {console.log(comment)}
+                    {comment.user._id == username ? (
+                      <p
+                        className="del"
+                        onClick={() => DeleteComment(comment._id)}
+                      >
+                        remove
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                    {comment.user._id == username ? (
+                      <p
+                        className="del"
+                        onClick={() => UpdateComment(comment._id)}
+                      >
+                        edit
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+            .reverse()}
+        </form>
+      </div>
+ 
+  );
+};
+
+export default Post;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
   return (
     <div className="container">
   
@@ -193,7 +288,7 @@ const Post = () => {
 };
 export default Post;
 
-
+*/
 
 /* import React, { useEffect, useState } from "react";
 import "./style.css";
